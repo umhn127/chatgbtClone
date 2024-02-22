@@ -4,8 +4,6 @@ const chatContainer = document.querySelector(".chat-container");
 const themeButton = document.querySelector("#theme-btn");
 const deleteButton = document.querySelector("#delete-btn");
 
-const API_KEY = "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";
-
 let userText = null;
 
 const createElement = (html, className) => {
