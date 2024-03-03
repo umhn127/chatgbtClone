@@ -4,6 +4,7 @@ const chatContainer = document.querySelector(".chat-container");
 const themeButton = document.querySelector("#theme-btn");
 const deleteButton = document.querySelector("#delete-btn");
 
+const API_KEY = "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";
 let userText = null;
 
 const createElement = (html, className) => {
@@ -21,11 +22,12 @@ const loadDataFromLocalStorage = () => {
   </div>
   `;
   chatContainer.innerHTML = localStorage.getItem("all-chats") || defaultText;
+  console.log(defaultText);
 };
 loadDataFromLocalStorage();
 
-const getChatResponse = async (incomingChatDiv) => {
-  const API_URL = "https://api.openai.com/v1/chat/completions";
+const getChatResponse = async (incomingChatDiv, userText) => {
+  const API_URL = " https://api.openai.com/v1/chat/completions";
 
   const pElement = document.createElement("p");
 
@@ -67,7 +69,7 @@ const getChatResponse = async (incomingChatDiv) => {
   localStorage.setItem("all-chats", chatContainer.innerHTML);
 };
 
-const showTypingAnimation = () => {
+const showTypingAnimation = (userText) => {
   const html = `
     <div class="chat-content">
     <div class="chat-details">
@@ -83,7 +85,7 @@ const showTypingAnimation = () => {
 
   const incomingChatDiv = createElement(html, "incoming");
   chatContainer.appendChild(incomingChatDiv);
-  getChatResponse(incomingChatDiv);
+  getChatResponse(incomingChatDiv, userText);
 };
 
 //chat input text değerlerini ayarlayan func.*trim boşluk engeli
@@ -101,10 +103,16 @@ const handleOutGoingChat = () => {
   `;
   const outgoingChatDiv = createElement(html, "outgoing");
   outgoingChatDiv.querySelector("p").textContent = userText;
-  document.querySelector(".default-text").remove();
+  const defaultTextElement = document.querySelector(".default-text");
+  if (defaultTextElement) {
+    defaultTextElement.remove();
+  }
+
   chatContainer.appendChild(outgoingChatDiv);
 
-  setTimeout(showTypingAnimation, 500);
+  chatInput.value = "";
+
+  setTimeout(() => showTypingAnimation(userText), 500);
 };
 
 //gönder butonunu izle
